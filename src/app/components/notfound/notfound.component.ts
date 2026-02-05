@@ -11,6 +11,6 @@ export class NotfoundComponent {
   constructor(private router: Router) {}
 
   goHome() {
-    this.router.navigate(['/login']);
+    this.router.navigate(['control-finance/login']);
   }
 }

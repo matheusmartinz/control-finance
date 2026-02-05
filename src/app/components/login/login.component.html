@@ -1,7 +1,7 @@
 <div class="min-h-screen flex">
-  <div class="hidden lg:flex w-1/2 items-center justify-center bg-indigo-600">
-    <img src="" alt="Sistema financeiro" class="max-w-md" />
-  </div>
+  <div
+    class="hidden lg:block w-1/2 bg-[url('/imgs/imagemLogin.png')] bg-cover bg-center bg-no-repeat"
+  ></div>
 
   <div class="flex w-full lg:w-1/2 items-center justify-center bg-gray-50">
     <p-card class="w-full max-w-md shadow-lg">
@@ -42,7 +42,7 @@
 
       <ng-template pTemplate="footer">
         <div class="flex justify-center">
-          <p-button label="Entrar" (onClick)="onClickLogin()" styleClass="w-40"></p-button>
+          <p-button label="Entrar" (onClick)="onClickLogin()" styleClass="w-40 "></p-button>
         </div>
       </ng-template>
     </p-card>

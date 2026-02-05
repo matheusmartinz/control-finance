@@ -6,15 +6,15 @@ import { HomeComponent } from './components/home/home.component';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'control-finance/login',
     pathMatch: 'full',
   },
   {
-    path: 'login',
+    path: 'control-finance/login',
     component: LoginComponent,
   },
   {
-    path: 'home',
+    path: 'control-finance/home',
     component: HomeComponent,
   },
   {

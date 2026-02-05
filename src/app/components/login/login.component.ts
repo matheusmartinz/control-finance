@@ -39,15 +39,15 @@ export class LoginComponent implements OnInit {
   };
 
   onClickLogin() {
-    // this.router.navigate(['/home']);
-    this.service.login(this.usuarioDTO).subscribe({
-      next: () => {
-        console.log('FOI');
-      },
-      error: (error) => {
-        console.log(error);
-      },
-    });
+    this.router.navigate(['control-finance/home']);
+    // this.service.login(this.usuarioDTO).subscribe({
+    //   next: () => {
+    //     console.log('FOI');
+    //   },
+    //   error: (error) => {
+    //     console.log(error);
+    //   },
+    // });
   }
 
   ngOnInit(): void {}

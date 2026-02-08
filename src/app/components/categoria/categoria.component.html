@@ -1,1 +1,50 @@
-<p>categoria works!</p>
+<p-dialog
+  header="Nova Categoria"
+  [(visible)]="visible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [dismissableMask]="true"
+  [style]="{ width: '620px' }"
+  [breakpoints]="{ '1200px': '560px', '992px': '92vw' }"
+  [contentStyle]="{ padding: '32px', overflow: 'visible' }"
+>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="md:col-span-2">
+      <p-floatlabel>
+        <input
+          id="descricao"
+          [(ngModel)]="dataCategoria.descricao"
+          pInputText
+          class="w-full h-12"
+          autocomplete="off"
+        />
+        <label for="descricao">Descrição</label>
+      </p-floatlabel>
+    </div>
+
+    <div class="md:col-span-2">
+      <p-floatlabel>
+        <p-autocomplete
+          inputId="categoria"
+          class="w-full"
+          inputStyleClass="w-full h-12"
+          appendTo="body"
+          [dropdown]="true"
+          [suggestions]="[]"
+          field="tipo"
+          [(ngModel)]="dataCategoria.tipo"
+        ></p-autocomplete>
+        <label for="tipo">Tipo</label>
+      </p-floatlabel>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-3">
+      <p-button label="Cancelar" (onClick)="visible = false" styleClass="p-button-text"></p-button>
+
+      <p-button label="Salvar" styleClass="p-button-help"></p-button>
+    </div>
+  </ng-template>
+</p-dialog>

@@ -10,47 +10,60 @@
   [contentStyle]="{ padding: '32px', overflow: 'visible' }"
 >
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <!-- Descrição -->
     <div class="md:col-span-2">
       <p-floatlabel>
-        <input id="descricao" pInputText class="w-full h-12" autocomplete="off" />
+        <input
+          id="descricao"
+          pInputText
+          class="w-full h-12"
+          autocomplete="off"
+          [(ngModel)]="dataReceita.descricao"
+        />
         <label for="descricao">Descrição</label>
       </p-floatlabel>
     </div>
 
-    <!-- Valor -->
     <div>
       <p-floatlabel>
-        <input id="valor" pInputText type="number" class="w-full h-12" autocomplete="off" />
+        <p-inputNumber
+          inputId="valor"
+          [(ngModel)]="dataReceita.valor"
+          mode="currency"
+          currency="BRL"
+          locale="pt-BR"
+          class="w-full"
+          inputClass="w-full h-12"
+        ></p-inputNumber>
         <label for="valor">Valor</label>
       </p-floatlabel>
     </div>
 
-    <!-- Data -->
     <div>
       <p-floatlabel>
         <p-datepicker
           inputId="data"
-          styleClass="w-full"
+          class="w-full"
           inputClass="w-full h-12"
           [showIcon]="true"
           dateFormat="dd/mm/yy"
           appendTo="body"
           [baseZIndex]="2500"
+          [(ngModel)]="dataReceita.data"
         ></p-datepicker>
         <label for="data">Data</label>
       </p-floatlabel>
     </div>
 
-    <!-- Categoria -->
     <div class="md:col-span-2">
       <p-floatlabel>
         <p-autocomplete
           inputId="categoria"
-          styleClass="w-full"
+          class="w-full"
           inputStyleClass="w-full h-12"
           appendTo="body"
           [dropdown]="true"
+          [suggestions]="dataReceita.categoria"
+          [(ngModel)]="dataReceita.categoria"
         ></p-autocomplete>
         <label for="categoria">Categoria</label>
       </p-floatlabel>
@@ -61,7 +74,8 @@
     <div class="flex justify-end gap-3">
       <p-button label="Cancelar" styleClass="p-button-text" (onClick)="visible = false"> </p-button>
 
-      <p-button label="Salvar" styleClass="p-button-success"> </p-button>
+      <p-button label="Salvar" styleClass="p-button-success" (onClick)="onClickSalvar()">
+      </p-button>
     </div>
   </ng-template>
 </p-dialog>

@@ -1,1 +1,86 @@
-<p>despesa works!</p>
+<p-dialog
+  header="Nova Despesa"
+  [(visible)]="visible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [dismissableMask]="true"
+  [style]="{ width: '820px' }"
+  [breakpoints]="{ '1200px': '740px', '992px': '92vw' }"
+  [contentStyle]="{ padding: '32px', overflow: 'visible' }"
+>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="md:col-span-2">
+      <p-floatlabel>
+        <input
+          id="descricao"
+          [(ngModel)]="dataDespesa.descricao"
+          pInputText
+          class="w-full h-12"
+          autocomplete="off"
+        />
+        <label for="descricao">Descrição</label>
+      </p-floatlabel>
+    </div>
+
+    <div>
+      <p-floatlabel>
+        <p-inputNumber
+          inputId="valor"
+          mode="currency"
+          currency="BRL"
+          locale="pt-BR"
+          class="w-full"
+          inputClass="w-full h-12"
+          [(ngModel)]="dataDespesa.valor"
+        ></p-inputNumber>
+        <label for="valor">Valor</label>
+      </p-floatlabel>
+    </div>
+
+    <div>
+      <p-floatlabel>
+        <p-datepicker
+          inputId="data"
+          [(ngModel)]="dataDespesa.dataVencimento"
+          class="w-full"
+          inputClass="w-full h-12"
+          [showIcon]="true"
+          dateFormat="dd/mm/yy"
+          appendTo="body"
+          [baseZIndex]="2500"
+        ></p-datepicker>
+        <label for="data">Data</label>
+      </p-floatlabel>
+    </div>
+
+    <div class="md:col-span-2">
+      <p-floatlabel>
+        <p-autocomplete
+          inputId="categoria"
+          [(ngModel)]="dataDespesa.categoria"
+          class="w-full"
+          inputStyleClass="w-full h-12"
+          appendTo="body"
+          [dropdown]="true"
+          [suggestions]="[]"
+          field="descricao"
+        ></p-autocomplete>
+        <label for="categoria">Categoria</label>
+      </p-floatlabel>
+    </div>
+
+    <div class="md:col-span-2 flex items-center gap-3">
+      <p-checkbox inputId="pago" [(ngModel)]="dataDespesa.pagamento" [binary]="true"></p-checkbox>
+      <label for="pago" class="cursor-pointer">Despesa paga</label>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-3">
+      <p-button label="Cancelar" styleClass="p-button-text" (onClick)="visible = false"></p-button>
+
+      <p-button label="Salvar" styleClass="p-button-danger"></p-button>
+    </div>
+  </ng-template>
+</p-dialog>

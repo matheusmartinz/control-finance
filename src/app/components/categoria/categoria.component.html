@@ -10,7 +10,7 @@
   [contentStyle]="{ padding: '32px', overflow: 'visible' }"
 >
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div class="md:col-span-2">
+    <div class="md:col-span-2 mb-3">
       <p-floatlabel>
         <input
           id="descricao"
@@ -26,14 +26,14 @@
     <div class="md:col-span-2">
       <p-floatlabel>
         <p-autocomplete
-          inputId="categoria"
+          inputId="tipo"
           class="w-full"
-          inputStyleClass="w-full h-12"
-          appendTo="body"
-          [dropdown]="true"
-          [suggestions]="[]"
-          field="tipo"
           [(ngModel)]="dataCategoria.tipo"
+          [dropdown]="true"
+          [suggestions]="filteredTipos"
+          field="label"
+          appendTo="body"
+          (completeMethod)="searchTipo($event)"
         ></p-autocomplete>
         <label for="tipo">Tipo</label>
       </p-floatlabel>
@@ -44,7 +44,7 @@
     <div class="flex justify-end gap-3">
       <p-button label="Cancelar" (onClick)="visible = false" styleClass="p-button-text"></p-button>
 
-      <p-button label="Salvar" styleClass="p-button-help"></p-button>
+      <p-button label="Salvar" (onClick)="onSave()" styleClass="p-button-help"></p-button>
     </div>
   </ng-template>
 </p-dialog>

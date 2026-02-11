@@ -6,5 +6,5 @@ export enum TipoCategoria {
 export interface Categoria {
   uuid: string | undefined;
   descricao: string;
-  tipo: TipoCategoria;
+  tipo: TipoCategoria | undefined;
 }

@@ -8,7 +8,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { Despesa } from './despesaModel';
-import { TipoCategoria } from '../categoria/categoriaModel';
+import { Categoria, TipoCategoria } from '../categoria/categoriaModel';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -31,6 +31,16 @@ import { FormsModule } from '@angular/forms';
 })
 export class DespesaComponent implements OnInit {
   protected visible = false;
+  protected getCategoria: Categoria[] = JSON.parse(localStorage.getItem('categoria') || '[]');
+
+  protected dataDespesa: Despesa = {
+    uuid: undefined,
+    descricao: '',
+    valor: 0,
+    dataVencimento: new Date(),
+    categoria: this.getCategoria,
+    pagamento: false,
+  };
 
   private resetDataDespesa(): Despesa {
     return {
@@ -48,21 +58,6 @@ export class DespesaComponent implements OnInit {
       pagamento: false,
     };
   }
-
-  protected dataDespesa: Despesa = {
-    uuid: undefined,
-    descricao: '',
-    valor: 0,
-    dataVencimento: new Date(),
-    categoria: [
-      {
-        uuid: undefined,
-        descricao: 'Empresa',
-        tipo: TipoCategoria.RECEITA,
-      },
-    ],
-    pagamento: false,
-  };
 
   itsVisibleDespesa() {
     this.dataDespesa = this.resetDataDespesa();

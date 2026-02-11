@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
@@ -6,9 +6,12 @@ import { DialogModule } from 'primeng/dialog';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { Categoria, TipoCategoria } from './categoriaModel';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-categoria',
+  standalone: true,
   imports: [
     FormsModule,
     DialogModule,
@@ -17,12 +20,15 @@ import { Categoria, TipoCategoria } from './categoriaModel';
     InputTextModule,
     AutoCompleteModule,
     FormsModule,
+    ToastModule,
   ],
+  providers: [MessageService],
   templateUrl: './categoria.component.html',
   styleUrl: './categoria.component.css',
 })
 export class CategoriaComponent {
   protected visible = false;
+  private toastMessage = inject(MessageService);
 
   protected dataCategoria: Categoria = {
     uuid: undefined,
@@ -62,7 +68,30 @@ export class CategoriaComponent {
     this.dataCategoria.uuid = crypto.randomUUID();
     let categoria: Categoria[] = JSON.parse(localStorage.getItem('categoria') || '[]');
     categoria.push(this.dataCategoria);
-    localStorage.setItem('categoria', JSON.stringify(categoria));
-    console.log(categoria);
+
+    const validaData: Categoria[] = JSON.parse(localStorage.getItem('categoria') || '[]');
+
+    if (
+      validaData.some(
+        (value) =>
+          value.descricao === this.dataCategoria.descricao ||
+          value.uuid === this.dataCategoria.uuid,
+      )
+    ) {
+      this.toastMessage.add({
+        severity: 'error',
+        summary: 'Erro de salvamento.',
+        detail: 'Esta categoria já existe.',
+      });
+      console.log(categoria.some((value) => value.descricao == this.dataCategoria.descricao));
+      return;
+    } else {
+      localStorage.setItem('categoria', JSON.stringify(categoria));
+      this.toastMessage.add({
+        severity: 'success',
+        detail: 'Categoria salva com sucesso.',
+      });
+      this.visible = false;
+    }
   }
 }

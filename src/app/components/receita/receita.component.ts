@@ -4,7 +4,7 @@ import { DialogModule } from 'primeng/dialog';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DatePickerModule } from 'primeng/datepicker';
 import { Receita } from './receitaModel';
-import { TipoCategoria } from '../categoria/categoriaModel';
+import { Categoria, TipoCategoria } from '../categoria/categoriaModel';
 import { FormsModule } from '@angular/forms';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
@@ -28,23 +28,14 @@ import { InputNumberModule } from 'primeng/inputnumber';
 })
 export class ReceitaComponent implements OnInit {
   protected visible = false;
+  protected getCategoria: Categoria[] = JSON.parse(localStorage.getItem('categoria') || '[]');
+
   protected dataReceita: Receita = {
     uuid: undefined,
     descricao: '',
     valor: 0,
     data: new Date(),
-    categoria: [
-      {
-        uuid: undefined,
-        descricao: 'TESTE',
-        tipo: TipoCategoria.RECEITA,
-      },
-      {
-        uuid: undefined,
-        descricao: 'TOMA NO CU',
-        tipo: TipoCategoria.RECEITA,
-      },
-    ],
+    categoria: this.getCategoria, //precisa filtrar e aparecer somente as categorias com a descricao no dropDown
   };
 
   private resetReceita(): Receita {
@@ -53,18 +44,7 @@ export class ReceitaComponent implements OnInit {
       descricao: '',
       valor: 0,
       data: new Date(),
-      categoria: [
-        {
-          uuid: undefined,
-          descricao: 'TESTE',
-          tipo: TipoCategoria.RECEITA,
-        },
-        {
-          uuid: undefined,
-          descricao: 'TOMA NO CU',
-          tipo: TipoCategoria.RECEITA,
-        },
-      ],
+      categoria: this.getCategoria,
     };
   }
 
@@ -75,6 +55,7 @@ export class ReceitaComponent implements OnInit {
 
   onClickSalvar() {
     console.log(this.dataReceita);
+    console.log(this.getCategoria.map((value) => value.descricao));
   }
 
   ngOnInit(): void {}

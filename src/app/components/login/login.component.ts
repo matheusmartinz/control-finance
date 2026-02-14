@@ -34,21 +34,41 @@ export class LoginComponent implements OnInit {
   ) {}
 
   protected usuarioDTO: UsuarioDTO = {
+    uuid: '',
     email: '',
     senha: '',
   };
 
+  protected isFirstAccess: boolean = false;
+
   onClickLogin() {
-    this.router.navigate(['control-finance/home']);
-    // this.service.login(this.usuarioDTO).subscribe({
-    //   next: () => {
-    //     console.log('FOI');
-    //   },
-    //   error: (error) => {
-    //     console.log(error);
-    //   },
-    // });
+    // this.router.navigate(['control-finance/home']);
+    // localStorage.setItem('firstAccess', 'false');
+    if (this.isFirstAccess == false) {
+      this.service.postCadastroUser(this.usuarioDTO).subscribe({
+        next: (response) => {
+          console.log('Cadastro realizado com sucesso:', response);
+          localStorage.setItem('firstAccess', 'false');
+          this.router.navigate(['control-finance/home']);
+        },
+        error: (error) => {
+          console.error('Erro ao realizar cadastro:', error);
+        },
+      });
+    }
   }
 
-  ngOnInit(): void {}
+  validateAccess() {
+    const access = localStorage.getItem('firstAccess');
+    if (!access) {
+      localStorage.setItem('firstAccess', 'true');
+      this.isFirstAccess = true;
+    } else {
+      this.isFirstAccess = false;
+    }
+  }
+
+  ngOnInit(): void {
+    this.validateAccess();
+  }
 }

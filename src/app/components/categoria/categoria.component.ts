@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
@@ -8,6 +8,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { Categoria, TipoCategoria } from './categoriaModel';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { ControlFinanceService } from '../control-finance.service';
 
 @Component({
   selector: 'app-categoria',
@@ -26,7 +27,9 @@ import { MessageService } from 'primeng/api';
   templateUrl: './categoria.component.html',
   styleUrl: './categoria.component.css',
 })
-export class CategoriaComponent {
+export class CategoriaComponent implements OnInit {
+  constructor(private categoriaService: ControlFinanceService) {}
+
   protected visible = false;
   private toastMessage = inject(MessageService);
 
@@ -65,33 +68,24 @@ export class CategoriaComponent {
   }
 
   onSave() {
-    this.dataCategoria.uuid = crypto.randomUUID();
-    let categoria: Categoria[] = JSON.parse(localStorage.getItem('categoria') || '[]');
-    categoria.push(this.dataCategoria);
-
-    const validaData: Categoria[] = JSON.parse(localStorage.getItem('categoria') || '[]');
-
-    if (
-      validaData.some(
-        (value) =>
-          value.descricao === this.dataCategoria.descricao ||
-          value.uuid === this.dataCategoria.uuid,
-      )
-    ) {
-      this.toastMessage.add({
-        severity: 'error',
-        summary: 'Erro de salvamento.',
-        detail: 'Esta categoria já existe.',
-      });
-      console.log(categoria.some((value) => value.descricao == this.dataCategoria.descricao));
-      return;
-    } else {
-      localStorage.setItem('categoria', JSON.stringify(categoria));
-      this.toastMessage.add({
-        severity: 'success',
-        detail: 'Categoria salva com sucesso.',
-      });
-      this.visible = false;
-    }
+    this.categoriaService.postCategoria(this.dataCategoria).subscribe({
+      next: (response) => {
+        this.toastMessage.add({
+          severity: 'success',
+          summary: 'Categoria criada com sucesso',
+          detail: `Categoria ${response.descricao} criada com sucesso!`,
+        });
+        this.visible = false;
+      },
+      error: (error) => {
+        this.toastMessage.add({
+          severity: 'error',
+          summary: 'Erro ao criar categoria',
+          detail: `Erro ao criar categoria: ${error.message}`,
+        });
+      },
+    });
   }
+
+  ngOnInit(): void {}
 }

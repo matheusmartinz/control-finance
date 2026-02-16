@@ -12,18 +12,15 @@ export class ControlFinanceService {
 
   constructor(private http: HttpClient) {}
 
-  postLoginUser(usuarioDTO: UsuarioDTO): Observable<string> {
-    return this.http.post<string>(
-      `${this._URL_BASE}/controle-financeiro/login/${usuarioDTO.uuid}`,
-      usuarioDTO,
-    );
+  postLoginUser(usuarioDTO: UsuarioDTO): Observable<UsuarioDTO> {
+    return this.http.post<UsuarioDTO>(`${this._URL_BASE}/controle-financeiro/login`, usuarioDTO);
   }
 
-  postCadastroUser(usuarioDTO: UsuarioDTO): Observable<string> {
-    return this.http.post<string>(`${this._URL_BASE}/controle-financeiro/cadastro`, usuarioDTO);
+  postCadastroUser(usuarioDTO: UsuarioDTO): Observable<UsuarioDTO> {
+    return this.http.post<UsuarioDTO>(`${this._URL_BASE}/controle-financeiro/cadastro`, usuarioDTO);
   }
 
-  postCategoria(categoria: Categoria): Observable<Categoria> {
-    return this.http.post<Categoria>(`${this._URL_BASE}/categoria/create`, categoria);
+  postCategoria(categoria: Categoria, userFK: string): Observable<Categoria> {
+    return this.http.post<Categoria>(`${this._URL_BASE}/categoria/create/${userFK}`, categoria);
   }
 }

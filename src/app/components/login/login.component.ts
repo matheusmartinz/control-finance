@@ -1,14 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
-import { UsuarioDTO } from '../models/usuario.dto';
-import { FormsModule } from '@angular/forms';
+import { Toast } from 'primeng/toast';
 import { ControlFinanceService } from '../control-finance.service';
+import { UsuarioDTO } from '../models/usuario.dto';
 
 @Component({
   selector: 'app-login',
@@ -20,10 +22,10 @@ import { ControlFinanceService } from '../control-finance.service';
     FloatLabelModule,
     PasswordModule,
     CommonModule,
-    InputTextModule,
-    CardModule,
     FormsModule,
+    Toast,
   ],
+  providers: [MessageService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -33,42 +35,63 @@ export class LoginComponent implements OnInit {
     private service: ControlFinanceService,
   ) {}
 
+  private messaService = inject(MessageService);
+
   protected usuarioDTO: UsuarioDTO = {
     uuid: '',
     email: '',
     senha: '',
   };
 
-  protected isFirstAccess: boolean = false;
+  protected isFirstAccess: boolean = true;
 
-  onClickLogin() {
-    // this.router.navigate(['control-finance/home']);
-    // localStorage.setItem('firstAccess', 'false');
-    if (this.isFirstAccess == false) {
+  onClickLogin(): void {
+    if (this.isFirstAccess) {
       this.service.postCadastroUser(this.usuarioDTO).subscribe({
-        next: (response) => {
-          console.log('Cadastro realizado com sucesso:', response);
+        next: (response: UsuarioDTO) => {
           localStorage.setItem('firstAccess', 'false');
+          localStorage.setItem('userId', response.uuid);
+
+          this.isFirstAccess = false;
+
+          this.messaService.add({
+            severity: 'success',
+            summary: 'Sucesso',
+            detail: 'Login realizado com sucesso.',
+          });
+
           this.router.navigate(['control-finance/home']);
         },
         error: (error) => {
-          console.error('Erro ao realizar cadastro:', error);
+          this.messaService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: 'Erro em fazer seu primeiro login.',
+          });
+        },
+      });
+    } else {
+      this.service.postLoginUser(this.usuarioDTO).subscribe({
+        next: (response) => {
+          this.messaService.add({
+            severity: 'success',
+            summary: 'Sucesso',
+            detail: 'Login realizado com sucesso.',
+          });
+          this.router.navigate(['control-finance/home']);
+        },
+        error: (error: any) => {
+          this.messaService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: error.error?.message,
+          });
         },
       });
     }
   }
 
-  validateAccess() {
-    const access = localStorage.getItem('firstAccess');
-    if (!access) {
-      localStorage.setItem('firstAccess', 'true');
-      this.isFirstAccess = true;
-    } else {
-      this.isFirstAccess = false;
-    }
-  }
-
   ngOnInit(): void {
-    this.validateAccess();
+    this.isFirstAccess = localStorage.getItem('firstAccess') !== 'false';
   }
 }

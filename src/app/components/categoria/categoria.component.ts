@@ -68,7 +68,8 @@ export class CategoriaComponent implements OnInit {
   }
 
   onSave() {
-    this.categoriaService.postCategoria(this.dataCategoria).subscribe({
+    const userId = localStorage.getItem('userId');
+    this.categoriaService.postCategoria(this.dataCategoria, userId ? userId : '').subscribe({
       next: (response) => {
         this.toastMessage.add({
           severity: 'success',
